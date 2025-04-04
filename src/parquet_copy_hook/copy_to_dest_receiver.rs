@@ -2,7 +2,7 @@ use std::ffi::{c_char, CStr, CString};
 
 use pg_sys::{
     get_typlenbyval, slot_getallattrs, toast_raw_datum_size, AllocSetContextCreateExtended,
-    AsPgCStr, BlessTupleDesc, CommandDest, CurrentMemoryContext, Datum, DestReceiver,
+    AsPgCStr, BlessTupleDesc, CommandDest, YbCurrentMemoryContext, Datum, DestReceiver,
     HeapTupleData, List, MemoryContext, MemoryContextAllocZero, MemoryContextDelete,
     MemoryContextReset, TupleDesc, TupleTableSlot, ALLOCSET_DEFAULT_INITSIZE,
     ALLOCSET_DEFAULT_MAXSIZE, ALLOCSET_DEFAULT_MINSIZE, VARHDRSZ,
@@ -268,7 +268,7 @@ pub extern "C" fn create_copy_to_parquet_dest_receiver(
 ) -> *mut DestReceiver {
     let per_copy_context = unsafe {
         AllocSetContextCreateExtended(
-            CurrentMemoryContext as _,
+            YbCurrentMemoryContext as _,
             "ParquetCopyDestReceiver".as_pg_cstr(),
             ALLOCSET_DEFAULT_MINSIZE as _,
             ALLOCSET_DEFAULT_INITSIZE as _,
